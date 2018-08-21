@@ -129,7 +129,7 @@ if __name__ == "__main__":
         app_private_key_path="../trade/keys/app_private_key2048.txt",
         alipay_public_key_path="../trade/keys/alipay_public_key.txt",  # 支付宝的公钥，验证支付宝回传消息使用，不是你自己的公钥,
         debug=True,  # 默认False,
-        return_url="http://118.190.202.67:8000/"
+        return_url="http://127.0.0.1:8000/"
     )
 
     o = urlparse(return_url)
