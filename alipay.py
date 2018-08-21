@@ -1,9 +1,5 @@
 # -*- coding: utf-8 -*-
-
-# pip install pycryptodome(一定要安装这个包)
-# pip install winrandom
-
-
+# __author__: jieshukai
 from datetime import datetime
 from Crypto.PublicKey import RSA
 from Crypto.Signature import PKCS1_v1_5
