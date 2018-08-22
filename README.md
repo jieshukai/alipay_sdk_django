@@ -56,7 +56,7 @@ alipay = AliPay(
 )
 ```
 
-###3.  generate  url 
+### 3.  generate  url
 
 ```python
 url = alipay.direct_pay(
