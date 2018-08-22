@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 # __author__: jieshukai
+import time
 from datetime import datetime
 from Crypto.PublicKey import RSA
 from Crypto.Signature import PKCS1_v1_5
@@ -29,9 +30,9 @@ class AliPay(object):
             self.alipay_public_key = RSA.importKey(fp.read())
 
         if debug is True:
-            self.__gateway = "https://openapi.alipaydev.com/gateway.do"
+            self.gateway = "https://openapi.alipaydev.com/gateway.do"
         else:
-            self.__gateway = "https://openapi.alipay.com/gateway.do"
+            self.gateway = "https://openapi.alipay.com/gateway.do"
 
     def direct_pay(self, subject, out_trade_no, total_amount, return_url=None, **kwargs):
         biz_content = {
@@ -117,31 +118,27 @@ class AliPay(object):
 
 
 if __name__ == "__main__":
-    # 根据商品信息生成支付宝链接
+    # 1. create an instance
     alipay = AliPay(
         appid="2016091300503105",
-        app_notify_url="http://127.0.0.1:8000/alipay/return",
-        app_private_key_path="../trade/keys/app_private_key2048.txt",
-        alipay_public_key_path="../trade/keys/alipay_public_key.txt",  # 支付宝的公钥，验证支付宝回传消息使用，不是你自己的公钥,
+        app_notify_url="http://127.0.0.1:8000/",
+        app_private_key_path="app_private_key2048.txt",
+        alipay_public_key_path="alipay_public_key.txt",  # 支付宝的公钥，验证支付宝回传消息使用，不是你自己的公钥,
         debug=True,  # 默认False,
         return_url="http://127.0.0.1:8000/"
     )
-
+    # 2. generate url
+    url = alipay.direct_pay(
+        subject='subject',
+        out_trade_no='{}'.format(time.strftime('%Y%m%d%H%M%S')),  # time stamp
+        total_amount=888
+    )
+    re_url = "{aliurl}?{data}".format(aliurl=alipay.gateway, data=url)
+    print(re_url)
+    # 3. get return url and check it
+    return_url = 'http://127.0.0.1:8000/?charset=utf-8&xxx=xxx'
     o = urlparse(return_url)
     query = parse_qs(o.query)
-    processed_query = {}
-    ali_sign = query.pop("sign")[0]
-    for key, value in query.items():
-        processed_query[key] = value[0]
+    processed_query = {k: v for k, v in query.items()}
+    ali_sign = processed_query.pop("sign")[0]
     print(alipay.verify(processed_query, ali_sign))
-
-    url = alipay.direct_pay(
-        subject="买一件内衣",
-        # 唯一订单号
-        out_trade_no="201808211222",  # 每次测试修改该字段
-        # 支付的总金额
-        total_amount=100
-    )
-    # 沙箱环境
-    re_url = "https://openapi.alipaydev.com/gateway.do?{data}".format(data=url)
-    print(re_url)

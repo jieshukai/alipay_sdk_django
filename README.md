@@ -43,39 +43,29 @@ pip install pycryptodome
 
 windows need `pip install winrandom` from https://www.lfd.uci.edu/~gohlke/pythonlibs/#winrandom
 
-###2. create a class named Alipay for alipay api
-
-```python
-class AliPay(object):
-    def __init__(self, appid, app_notify_url, app_private_key_path,
-                 alipay_public_key_path, return_url, debug=False):
-        self.appid = appid
-        self.app_notify_url = app_notify_url
-        self.app_private_key_path = app_private_key_path
-        self.app_private_key = None
-        self.return_url = return_url
-        with open(self.app_private_key_path) as fp:
-            self.app_private_key = RSA.importKey(fp.read())
-        self.alipay_public_key_path = alipay_public_key_path
-        with open(self.alipay_public_key_path) as fp:
-            self.alipay_public_key = RSA.importKey(fp.read())
-        if debug is True:
-            self.__gateway = "https://openapi.alipaydev.com/gateway.do"
-        else:
-            self.__gateway = "https://openapi.alipay.com/gateway.do"
-```
-
-### 3. create an instance
+### 2. create an instance
 
 ```python
 alipay = AliPay(
-    appid="2016091300503105",
-    app_notify_url="http://127.0.0.1:8000/alipay/return",
-    app_private_key_path="../trade/keys/app_private_key2048.txt",
-    alipay_public_key_path="../trade/keys/alipay_public_key.txt",  
-    debug=True,  # 默认False,
+    appid="2016091300503105", # your appid
+    app_notify_url="http://127.0.0.1:8000", # your web api
+    app_private_key_path="app_private_key2048.txt", 
+    alipay_public_key_path="alipay_public_key.txt",  
+    debug=True,  # for dev 
     return_url="http://127.0.0.1:8000/"
 )
+```
+
+###3.  generate  url 
+
+```python
+url = alipay.direct_pay(
+    subject='subject', 
+    out_trade_no='{}'.format(time.strftime('%Y%m%d%H%M%S')),  # time stamp
+    total_amount=888 
+)
+re_url = "https://openapi.alipaydev.com/gateway.do?{data}".format(data=url)
+print(re_url)
 ```
 
 

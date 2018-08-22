@@ -1,0 +1,10 @@
+
+.idea/misc.xml
+.idea/alipay_sdk_django.iml
+.idea/inspectionProfiles/Project_Default.xml
+.idea/modules.xml
+.idea/vcs.xml
+.idea/workspace.xml
+alipay_public_key.txt
+app_private_key2048.txt
+app_public_key2048.txt
