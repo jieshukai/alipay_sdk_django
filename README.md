@@ -64,11 +64,20 @@ url = alipay.direct_pay(
     out_trade_no='{}'.format(time.strftime('%Y%m%d%H%M%S')),  # time stamp
     total_amount=888 
 )
-re_url = "https://openapi.alipaydev.com/gateway.do?{data}".format(data=url)
+re_url = "{aliurl}?{data}".format(aliurl=alipay.gateway, data=url)
 print(re_url)
 ```
 
+### 4. get return url and check it
 
+```python
+return_url = 'http://127.0.0.1:8000/?charset=utf-8&xxx=xxx'
+o = urlparse(return_url)
+query = parse_qs(o.query)
+processed_query = {k: v for k, v in query.items()}
+ali_sign = processed_query.pop("sign")[0]
+print(alipay.verify(processed_query, ali_sign))
+```
 
 
 
