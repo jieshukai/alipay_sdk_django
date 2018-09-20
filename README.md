@@ -41,7 +41,7 @@ Alipay APi ：https://openapi.alipay.com/gateway.do
 pip install pycryptodome
 ```
 
-windows need `pip install winrandom` from https://www.lfd.uci.edu/~gohlke/pythonlibs/#winrandom
+windows need `pip install winrandom` or download from https://www.lfd.uci.edu/~gohlke/pythonlibs/#winrandom
 
 ### 2. create an instance
 
